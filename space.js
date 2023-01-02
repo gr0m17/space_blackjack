@@ -14,8 +14,8 @@ class Deck {
   }
 
   buildStandardDeck() {
-    // Create a new set of cards for each deck specified...
-    for (let i = 0; i < this.numDecks; i++) {
+    // Create a new set of cards for a standard deck of 52 cards
+    for (let i = 0; i < 1; i++) {
       const suits = ["hearts", "diamonds", "clubs", "spades"];
       for (let suit of suits) {
         for (let value = 1; value <= 13; value++) {
@@ -35,12 +35,19 @@ class Shoe {
   loadCards(deck) {
     //if numDecks is 1, then load the cards from the deck
     this.cards = deck.cards;
+    this.numDecks = deck.numDecks;
     //if numDecks is greater than 1, then load the cards from the deck
     //and repeat the process for the number of decks specified
     for (let i = 0; i < this.numDecks - 1; i++) {
       this.cards = this.cards.concat(deck.cards);
     }
-    this.cut = false;
+    // this.cut = false; //set the cut flag to false
+    //move all the cards to the discard pile
+    this.discard = this.cards;
+    this.cards = [];
+    //add the cut card to the empty shoe
+    this.cards.push(new Card("cut", 0));
+    //the cards are now ready to be shuffled, and when the dealer starts to deal he will find the cut card and start the shuffle
   }
 
   getCard() {
@@ -61,11 +68,11 @@ class Hand {
 }
 
 class Table {
-  constructor(shuffleType, numDecks) {
+  constructor(numDecks) {
     this.hands = [];
 
     this.shoe = new Shoe(numDecks);
-    this.discard = [];
+
     this.shuffleSequence = [
       "wash",
       "riffle",
